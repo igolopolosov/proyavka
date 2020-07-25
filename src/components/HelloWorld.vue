@@ -5,13 +5,13 @@
       v-if="!running"
       v-on:click="startTimer"
       class="Timer_StartButton"
-    >Start</button>
+    >START</button>
 
     <button
       v-if="running"
       v-on:click="stopTimer"
       class="Timer_StopButton"
-    >Stop</button>
+    >STOP</button>
 
     <div
       v-if="running"
@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { intervalToDuration, formatDuration } from 'date-fns'
+import { intervalToDuration } from 'date-fns'
 import { TIMER_INITIAL_STATE, ACTION_DESCRIPTION } from '../store'
 
 export default Vue.extend({
@@ -80,6 +80,7 @@ export default Vue.extend({
     cursor: pointer;
     border-radius: 8px;
     font-size: 48px;
+    font-weight: 900;
   }
 
   &_StartButton {

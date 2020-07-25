@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="App">
     <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-    <div class="App_Version">version: 1.0.0-alpha</div>
+    <div class="App_Version">version: 1.1.0-beta</div>
   </div>
 </template>
 
