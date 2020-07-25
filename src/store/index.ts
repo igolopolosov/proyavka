@@ -137,6 +137,7 @@ export default new Vuex.Store({
     },
     stopTimer (context) {
       clearInterval(timerId)
+      audio.pause()
       context.commit('reset')
     }
   },
