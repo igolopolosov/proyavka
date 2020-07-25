@@ -3,10 +3,20 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+export const TIMER_INITIAL_STATE = -1
+
 enum ACTION {
   PROYAVKA_START = 'PROYAVKA_START',
   PROYAVKA_SPINNING = 'PROYAVKA_SPINNING',
   PROYAVKA_WAITING = 'PROYAVKA_WAITING',
+}
+
+export const ACTION_DESCRIPTION: {
+  [key: string]: string;
+} = {
+  [ACTION.PROYAVKA_START]: 'Готовимся к проявке',
+  [ACTION.PROYAVKA_SPINNING]: 'Вращаем',
+  [ACTION.PROYAVKA_WAITING]: 'Ждём'
 }
 
 interface TimeDiff {
@@ -48,13 +58,22 @@ timeDiff.forEach((time, index) => {
 
 console.log(timeLine)
 
+let timerId: number
+
 export default new Vuex.Store({
   state: {
-    timer: -1
+    timer: TIMER_INITIAL_STATE,
+    action: timeLine[0].action
   },
   mutations: {
     addSecond (state) {
       state.timer++
+    },
+    setAction (state, action) {
+      state.action = action
+    },
+    reset (state) {
+      state.timer = TIMER_INITIAL_STATE
     }
   },
   actions: {
@@ -63,6 +82,11 @@ export default new Vuex.Store({
         context.commit('addSecond')
         const action = timeLine.find(time => time.timeCode === context.state.timer)
         console.log(action)
+
+        if (action) {
+          context.commit('setAction', action.action)
+        }
+
         if (action?.action === ACTION.PROYAVKA_SPINNING) {
           new Audio('sound/proyavka-spin-start.mp3').play()
         }
@@ -73,7 +97,11 @@ export default new Vuex.Store({
       }
 
       timerStep()
-      setInterval(timerStep, 1000)
+      timerId = setInterval(timerStep, 1000)
+    },
+    stopTimer (context) {
+      clearInterval(timerId)
+      context.commit('reset')
     }
   },
   modules: {
