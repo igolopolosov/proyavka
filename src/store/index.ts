@@ -23,9 +23,9 @@ export const ACTION_DESCRIPTION: {
   [ACTION.PROYAVKA_SPINNING]: 'Вращаем',
   [ACTION.PROYAVKA_WAITING]: 'Ждём',
   [ACTION.FIRST_FLUSHING]: 'Промываем первый раз',
-  [ACTION.FIXATION_PROCESS]: 'Фиксируем',
-  [ACTION.FLUSHING_START]: 'Начинаем промывание',
-  [ACTION.FLUSHING_PROCESS]: 'Промываем',
+  [ACTION.FIXATION_PROCESS]: 'Фиксируем плёнку',
+  [ACTION.FLUSHING_START]: 'Начинаем промывание плёнки',
+  [ACTION.FLUSHING_PROCESS]: 'Промываем плёнку',
   [ACTION.PROYAVKA_FINISH]: 'Закончили проявку'
 }
 

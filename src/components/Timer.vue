@@ -35,7 +35,7 @@ import { intervalToDuration } from 'date-fns'
 import { TIMER_INITIAL_STATE, ACTION_DESCRIPTION } from '../store'
 
 export default Vue.extend({
-  name: 'HelloWorld',
+  name: 'Timer',
   props: {
     msg: String
   },
