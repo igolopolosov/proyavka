@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export const TIMER_INITIAL_STATE = -1
+export const TIMER_INITIAL_STATE = -11
 
 enum ACTION {
   PROYAVKA_START = 'PROYAVKA_START',
@@ -40,14 +40,14 @@ const timeDiff: TimeDiff[] = [
 ]
 
 const timeLine: TimeLine[] = [{
-  timeCode: 0,
+  timeCode: TIMER_INITIAL_STATE + 1,
   timeSpan: 10,
   action: ACTION.PROYAVKA_START
 }]
 timeDiff.forEach((time, index) => {
   const previousTime = timeLine && timeLine[index]
-  const previousTimeCode = previousTime?.timeCode || 0
-  const previousTimeSpan = previousTime?.timeSpan || 0
+  const previousTimeCode = previousTime?.timeCode
+  const previousTimeSpan = previousTime?.timeSpan
 
   timeLine.push({
     timeCode: previousTimeCode + previousTimeSpan,

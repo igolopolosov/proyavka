@@ -17,7 +17,6 @@
       v-if="running"
       class="Timer_Time"
     >
-      <span>Time: </span>
       <span >{{ timer }}</span>
     </div>
     <div
@@ -32,6 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { intervalToDuration, formatDuration } from 'date-fns'
 import { TIMER_INITIAL_STATE, ACTION_DESCRIPTION } from '../store'
 
 export default Vue.extend({
@@ -49,7 +49,15 @@ export default Vue.extend({
   },
   computed: {
     timer () {
-      return (this.$store as any).state.timer
+      const timer = (this.$store as any).state.timer
+      const durations = intervalToDuration({ start: 0, end: timer * 1000 })
+      const { seconds, minutes } = durations
+      const leadingZero = (value?: number) => {
+        if (!value) return '0'
+        if (value && value < 10) return '0'
+        return ''
+      }
+      return `${leadingZero(minutes)}${minutes}:${leadingZero(seconds)}${seconds}`
     },
     running () {
       return (this.$store as any).state.timer !== TIMER_INITIAL_STATE
