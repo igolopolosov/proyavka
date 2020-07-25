@@ -1,6 +1,8 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <button v-on:click="startTimer">Start timer</button>
+    <div>Time: {{ timer }}</div>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -42,6 +44,16 @@ export default Vue.extend({
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  methods: {
+    startTimer () {
+      this.$store.dispatch('startTimer')
+    }
+  },
+  computed: {
+    timer () {
+      return (this.$store as any).state.timer
+    }
   }
 })
 </script>
