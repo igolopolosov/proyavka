@@ -1,18 +1,18 @@
 <template>
   <div id="app" class="App">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-    <div class="App_Version">version: 1.1.0-beta</div>
+    <Timer />
+    <div class="App_Version">version: 1.1.1-beta</div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import Timer from './components/Timer.vue'
 
 export default Vue.extend({
   name: 'App',
   components: {
-    HelloWorld
+    Timer
   }
 })
 </script>
