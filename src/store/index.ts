@@ -10,6 +10,11 @@ enum ACTION {
   PROYAVKA_SPINNING = 'PROYAVKA_SPINNING',
   PROYAVKA_WAITING = 'PROYAVKA_WAITING',
   FIRST_FLUSHING = 'FIRST_FLUSHING',
+  FIXATION_START = 'FIXATION_START',
+  FIXATION_PROCESS = 'FIXATION_PROCESS',
+  FLUSHING_START = 'FLUSHING_START',
+  FLUSHING_PROCESS = 'FLUSHING_PROCESS',
+  PROYAVKA_FINISH = 'PROYAVKA_FINISH',
 }
 
 export const ACTION_DESCRIPTION: {
@@ -18,7 +23,12 @@ export const ACTION_DESCRIPTION: {
   [ACTION.PROYAVKA_START]: 'Готовимся к проявке',
   [ACTION.PROYAVKA_SPINNING]: 'Вращаем',
   [ACTION.PROYAVKA_WAITING]: 'Ждём',
-  [ACTION.FIRST_FLUSHING]: 'Промываем первый раз'
+  [ACTION.FIRST_FLUSHING]: 'Промываем первый раз',
+  [ACTION.FIXATION_START]: 'Начинаем фиксирование',
+  [ACTION.FIXATION_PROCESS]: 'Фиксируем',
+  [ACTION.FLUSHING_START]: 'Начинаем промывание',
+  [ACTION.FLUSHING_PROCESS]: 'Промываем',
+  [ACTION.PROYAVKA_FINISH]: 'Закончили проявку'
 }
 
 const ACTION_SOUND: {
@@ -27,7 +37,12 @@ const ACTION_SOUND: {
   [ACTION.PROYAVKA_START]: 'sound/1-hello-darkness.mp3',
   [ACTION.PROYAVKA_SPINNING]: 'sound/2-bell.mp3',
   [ACTION.PROYAVKA_WAITING]: 'sound/3-bazinga.mp3',
-  [ACTION.FIRST_FLUSHING]: 'sound/4-run-vine.mp3'
+  [ACTION.FIRST_FLUSHING]: 'sound/4-run-vine.mp3',
+  [ACTION.FIXATION_START]: 'sound/5-how-you-doin.mp3',
+  [ACTION.FIXATION_PROCESS]: 'sound/6-daft_punk_-_robot_rock.mp3',
+  [ACTION.FLUSHING_START]: 'sound/7-run-vine.mp3',
+  [ACTION.FLUSHING_PROCESS]: 'sound/8-daft_punk_-_lose_yourself_to_dance.mp3',
+  [ACTION.PROYAVKA_FINISH]: 'sound/9-halleluja.mp3'
 }
 
 interface TimeDiff {
@@ -48,7 +63,12 @@ const timeDiff: TimeDiff[] = [
   { timeSpan: 15, action: ACTION.PROYAVKA_SPINNING }, { timeSpan: 45, action: ACTION.PROYAVKA_WAITING },
   { timeSpan: 15, action: ACTION.PROYAVKA_SPINNING }, { timeSpan: 45, action: ACTION.PROYAVKA_WAITING },
   { timeSpan: 45, action: ACTION.PROYAVKA_SPINNING }, { timeSpan: 15, action: ACTION.PROYAVKA_WAITING },
-  { timeSpan: 60, action: ACTION.FIRST_FLUSHING }
+  { timeSpan: 60, action: ACTION.FIRST_FLUSHING },
+  { timeSpan: 10, action: ACTION.FIXATION_START },
+  { timeSpan: 290, action: ACTION.FIXATION_PROCESS },
+  { timeSpan: 10, action: ACTION.FLUSHING_START },
+  { timeSpan: 410, action: ACTION.FLUSHING_PROCESS },
+  { timeSpan: 10, action: ACTION.PROYAVKA_FINISH }
 ]
 
 const timeLine: TimeLine[] = [{
@@ -105,11 +125,15 @@ export default new Vuex.Store({
           }
           audio = new Audio(actionSound)
           audio.play()
+
+          if (action.action === ACTION.PROYAVKA_FINISH) {
+            context.dispatch('stopTimer')
+          }
         }
       }
 
       timerStep()
-      timerId = setInterval(timerStep, 100)
+      timerId = setInterval(timerStep, 1000)
     },
     stopTimer (context) {
       clearInterval(timerId)
