@@ -9,6 +9,7 @@ enum ACTION {
   PROYAVKA_START = 'PROYAVKA_START',
   PROYAVKA_SPINNING = 'PROYAVKA_SPINNING',
   PROYAVKA_WAITING = 'PROYAVKA_WAITING',
+  FIRST_FLUSHING = 'FIRST_FLUSHING',
 }
 
 export const ACTION_DESCRIPTION: {
@@ -16,7 +17,17 @@ export const ACTION_DESCRIPTION: {
 } = {
   [ACTION.PROYAVKA_START]: 'Готовимся к проявке',
   [ACTION.PROYAVKA_SPINNING]: 'Вращаем',
-  [ACTION.PROYAVKA_WAITING]: 'Ждём'
+  [ACTION.PROYAVKA_WAITING]: 'Ждём',
+  [ACTION.FIRST_FLUSHING]: 'Промываем первый раз'
+}
+
+const ACTION_SOUND: {
+  [key: string]: string;
+} = {
+  [ACTION.PROYAVKA_START]: 'sound/1-hello-darkness.mp3',
+  [ACTION.PROYAVKA_SPINNING]: 'sound/2-bell.mp3',
+  [ACTION.PROYAVKA_WAITING]: 'sound/3-bazinga.mp3',
+  [ACTION.FIRST_FLUSHING]: 'sound/4-run-vine.mp3'
 }
 
 interface TimeDiff {
@@ -36,7 +47,8 @@ const timeDiff: TimeDiff[] = [
   { timeSpan: 15, action: ACTION.PROYAVKA_SPINNING }, { timeSpan: 45, action: ACTION.PROYAVKA_WAITING },
   { timeSpan: 15, action: ACTION.PROYAVKA_SPINNING }, { timeSpan: 45, action: ACTION.PROYAVKA_WAITING },
   { timeSpan: 15, action: ACTION.PROYAVKA_SPINNING }, { timeSpan: 45, action: ACTION.PROYAVKA_WAITING },
-  { timeSpan: 45, action: ACTION.PROYAVKA_SPINNING }, { timeSpan: 15, action: ACTION.PROYAVKA_WAITING }
+  { timeSpan: 45, action: ACTION.PROYAVKA_SPINNING }, { timeSpan: 15, action: ACTION.PROYAVKA_WAITING },
+  { timeSpan: 60, action: ACTION.FIRST_FLUSHING }
 ]
 
 const timeLine: TimeLine[] = [{
@@ -59,6 +71,7 @@ timeDiff.forEach((time, index) => {
 console.log(timeLine)
 
 let timerId: number
+let audio: HTMLAudioElement
 
 export default new Vuex.Store({
   state: {
@@ -85,19 +98,18 @@ export default new Vuex.Store({
 
         if (action) {
           context.commit('setAction', action.action)
-        }
+          const actionSound = ACTION_SOUND[action.action]
 
-        if (action?.action === ACTION.PROYAVKA_SPINNING) {
-          new Audio('sound/proyavka-spin-start.mp3').play()
-        }
-
-        if (action?.action === ACTION.PROYAVKA_WAITING) {
-          new Audio('sound/proyavka-spin-stop.mp3').play()
+          if (audio) {
+            audio.pause()
+          }
+          audio = new Audio(actionSound)
+          audio.play()
         }
       }
 
       timerStep()
-      timerId = setInterval(timerStep, 1000)
+      timerId = setInterval(timerStep, 100)
     },
     stopTimer (context) {
       clearInterval(timerId)
